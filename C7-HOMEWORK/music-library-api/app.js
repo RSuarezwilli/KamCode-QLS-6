@@ -1,29 +1,14 @@
 import express from 'express';
-import artistRoutes from '../routes/artistRoutes.js';
-import songRoutes from '../routes/sonRoutes.js';
-import { sequelize } from '../config/config.js'; // tu conexión Sequelize
+import artistRoutes from './routes/artistRoutes.js';
+import songRoutes from './routes/songRoutes.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Middlewares
 app.use(express.json());
 
-// Rutas
-app.use('/artists', artistRoutes);
-app.use('/songs', songRoutes);
+app.use('/api', artistRoutes);
+app.use('/api', songRoutes);
 
-// Probar conexión a la base de datos
-sequelize.authenticate()
-  .then(() => {
-    console.log('Conexión a la base de datos establecida correctamente.');
-  })
-  .catch((err) => {
-    console.error('Error al conectar con la base de datos:', err);
-  });
-
-// Levantar el servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor corriendo en puerto ${PORT}`);
 });
-

@@ -1,54 +1,52 @@
-import Artist from '../models/artist.js';
+import { Artist } from '../models/index.js';
 
-// Crear un artista
-export const createArtist = async (req, res) => {
+// Crear un nuevo artista
+export async function createArtist(req, res) {
   try {
-    const { name, bio, photoUrl } = req.body;
-    const newArtist = await Artist.create({ name, bio, photoUrl });
+    const newArtist = await Artist.create(req.body);
     res.status(201).json(newArtist);
   } catch (error) {
-    res.status(400).json({ error: 'Error al crear el artista', details: error.message });
+    res.status(400).json({ error: error.message });
   }
-};
+}
 
 // Obtener todos los artistas
-export const getAllArtists = async (req, res) => {
+export async function getAllArtists(req, res) {
   try {
     const artists = await Artist.findAll();
     res.json(artists);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener los artistas', details: error.message });
+    res.status(500).json({ error: error.message });
   }
-};
+}
 
-// Actualizar un artista
-export const updateArtist = async (req, res) => {
+// Actualizar artista por ID
+export async function updateArtist(req, res) {
   try {
     const { id } = req.params;
-    const { name, bio, photoUrl } = req.body;
-
-    const artist = await Artist.findByPk(id);
-    if (!artist) return res.status(404).json({ error: 'Artista no encontrado' });
-
-    await artist.update({ name, bio, photoUrl });
-    res.json(artist);
+    const [updated] = await Artist.update(req.body, { where: { id } });
+    if (updated) {
+      const updatedArtist = await Artist.findByPk(id);
+      res.json(updatedArtist);
+    } else {
+      res.status(404).json({ error: 'Artista no encontrado' });
+    }
   } catch (error) {
-    res.status(400).json({ error: 'Error al actualizar el artista', details: error.message });
+    res.status(400).json({ error: error.message });
   }
-};
+}
 
-// Eliminar un artista
-export const deleteArtist = async (req, res) => {
+// Eliminar artista
+export async function deleteArtist(req, res) {
   try {
     const { id } = req.params;
-    const artist = await Artist.findByPk(id);
-    if (!artist) return res.status(404).json({ error: 'Artista no encontrado' });
-
-    await artist.destroy();
-    res.json({ message: 'Artista eliminado correctamente' });
+    const deleted = await Artist.destroy({ where: { id } });
+    if (deleted) {
+      res.json({ message: 'Artista eliminado correctamente' });
+    } else {
+      res.status(404).json({ error: 'Artista no encontrado' });
+    }
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el artista', details: error.message });
+    res.status(500).json({ error: error.message });
   }
-};
-
-
+}
