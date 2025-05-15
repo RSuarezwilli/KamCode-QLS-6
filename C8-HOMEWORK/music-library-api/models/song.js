@@ -1,37 +1,29 @@
+// models/song.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
 const Song = sequelize.define('Song', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-      len: [2, 100]
-    }
+    allowNull: false
   },
   artistId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
   releaseYear: {
-    type: DataTypes.INTEGER,
-    validate: {
-      min: 1900,
-      max: new Date().getFullYear()
-    }
+    type: DataTypes.INTEGER
   },
   duration: {
-    type: DataTypes.INTEGER,
-    validate: {
-      min: 1
-    }
+    type: DataTypes.INTEGER  // segundos
   },
   coverUrl: {
-    type: DataTypes.STRING,
-    validate: {
-      isUrl: true
-    }
+    type: DataTypes.STRING
   }
 }, {
   timestamps: false

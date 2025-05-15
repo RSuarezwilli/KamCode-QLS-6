@@ -19,6 +19,20 @@ export const getAllArtists = async (req, res) => {
   }
 };
 
+export const getArtistById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const artist = await Artist.findByPk(id);
+    if (artist) {
+      res.status(200).json(artist);
+    } else {
+      res.status(404).json({ error: 'Artist not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const updateArtist = async (req, res) => {
   try {
     const { id } = req.params;
@@ -47,4 +61,3 @@ export const deleteArtist = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-

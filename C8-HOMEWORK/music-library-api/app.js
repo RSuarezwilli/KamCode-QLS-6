@@ -33,3 +33,4 @@ sequelize.sync({ force: false })
     console.error('Error al sincronizar la base de datos:', error);
   });
 
+
